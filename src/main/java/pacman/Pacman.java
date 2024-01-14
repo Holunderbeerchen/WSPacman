@@ -1,48 +1,24 @@
-package org.example;
+package pacman;
 
-import javafx.scene.input.KeyCode;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
+import javax.swing.*;
 
-public class Pacman extends Circle {
-    private static final int PACMAN_RADIUS = 20;
-    private static final double PACMAN_SPEED = 5.0;
+
+public class Pacman extends JFrame{
 
     public Pacman() {
-        super(PACMAN_RADIUS, Color.YELLOW);
+        add(new Model());
     }
 
-    public void move(KeyCode direction) {
-        switch (direction) {
-            case UP:
-                setCenterY(getCenterY() - PACMAN_SPEED);
-                break;
-            case DOWN:
-                setCenterY(getCenterY() + PACMAN_SPEED);
-                break;
-            case LEFT:
-                setCenterX(getCenterX() - PACMAN_SPEED);
-                break;
-            case RIGHT:
-                setCenterX(getCenterX() + PACMAN_SPEED);
-                break;
-            default:
-                break;
-        }
+
+    public static void main(String[] args) {
+        Pacman pac = new Pacman();
+        pac.setVisible(true);
+        pac.setTitle("Pacman");
+        pac.setSize(380,420);
+        pac.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        pac.setLocationRelativeTo(null);
+
     }
 
-    public void handleInput(KeyCode keyCode) {
-        switch (keyCode) {
-            case UP:
-            case DOWN:
-            case LEFT:
-            case RIGHT:
-                move(keyCode);
-                break;
-            default:
-                // Handle other input if needed
-                break;
-        }
-    }
 }
 
