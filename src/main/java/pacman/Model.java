@@ -44,7 +44,7 @@ public class Model extends JPanel implements ActionListener {
     private int pacmand_x, pacmand_y; // die Richtungs-Änderung in x- und y-Richtung der Spielfigur.
     private int req_dx, req_dy; // Variablen für die
 
-    private final short levelData[] = {
+    private final short levelData1[] = {
             19, 18, 18, 18, 18, 18, 18, 18, 26, 18, 18, 18, 18, 18, 22,
             17, 16, 16, 16, 16, 16, 16, 20,  0, 17, 16, 16, 16, 16, 20,
             17, 16, 16, 16, 16, 16, 16, 20,  0, 17, 24, 16, 16, 16, 20,
@@ -61,6 +61,23 @@ public class Model extends JPanel implements ActionListener {
             17, 16, 16, 20,  0,  0,  0,  0,  0,  0,  0, 17, 16, 16, 20,
             25, 24, 24, 24, 26, 26, 26, 26, 26, 26, 26, 24, 24, 24, 28
     };
+    private final short levelData2[] = {
+            19, 18, 18, 18, 18, 18, 18, 18, 26, 18, 18, 18, 18, 18, 22,
+            17, 16, 16, 16, 16, 16, 16, 20,  0, 17, 16, 16, 16, 16, 20,
+            17, 16, 16, 16, 16, 16, 16, 20,  0, 17, 24, 16, 16, 16, 20,
+            17, 16, 16, 16, 16, 16, 16, 20,  0, 21,  0, 17, 16, 16, 20,
+            17, 16, 16, 24, 24, 24, 24, 20,  0, 29,  0, 25, 24, 16, 20,
+            17, 16, 20,  0,  0,  0,  0, 21,  0,  0,  0,  0,  0, 17, 20,
+            17, 16, 20,  0, 19, 22,  0, 17, 18, 22,  0, 19, 18, 16, 20,
+            17, 16, 20,  0, 17, 28,  0, 17, 16, 20,  0, 17, 16, 16, 20,
+            17, 16, 20,  0, 21,  0,  0, 17, 16, 20,  0, 17, 16, 16, 20,
+            17, 16, 20,  0, 17, 18, 18, 16, 16, 20,  0, 17, 16, 16, 20,
+            17, 16, 20,  0, 17, 16, 16, 16, 16, 16, 18, 16, 16, 16, 20,
+            17, 16, 20,  0, 17, 16, 16, 16, 16, 16, 16, 16, 16, 16, 20,
+            17, 16, 16, 18, 24, 24, 24, 24, 24, 24, 24, 16, 16, 16, 20,
+            17, 16, 16, 20,  0,  0,  0,  0,  0,  0,  0, 17, 16, 16, 20,
+            25, 24, 24, 24, 26, 26, 26, 26, 26, 26, 26, 24, 24, 24, 28 };
+    private short levelData[];
     /*
     Jeder Eintrag = ein Spielbaustein.
     Codierung: 0 = Hindernis, 1 = linker Rand, 2 = oberer Rand, 4 = rechter Rand, 8 = unterer Rand, 16 = Sammelstein.
@@ -75,7 +92,12 @@ public class Model extends JPanel implements ActionListener {
     private short[] screenData; // erstellt mithilfe von levelData[] das Spielfeld.
     private Timer timer;
 
-    public Model() {
+    public Model(int level) {
+        if (level == 1) {
+            levelData = levelData1;
+        } else if (level == 2) {
+            levelData = levelData2;
+        }
 
         loadImages();
         initVariables();
