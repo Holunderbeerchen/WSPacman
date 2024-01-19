@@ -99,6 +99,7 @@ public class Model extends JPanel implements ActionListener {
             levelData = levelData2;
         }
 
+
         loadImages();
         initVariables();
         addKeyListener(new TAdapter());
@@ -180,7 +181,7 @@ public class Model extends JPanel implements ActionListener {
         }
 
         if (finished) {
-
+            SoundEffect.play("Audio/slowClap.wav");
             score += 50;
 
             if (N_GHOSTS < MAX_GHOSTS) {
@@ -294,6 +295,7 @@ public class Model extends JPanel implements ActionListener {
             if ((ch & 16) != 0) {
                 screenData[pos] = (short) (ch & 15);
                 score++;
+                SoundEffect.play("Audio/pop.wav");
             }
 
             if (req_dx != 0 || req_dy != 0) {
