@@ -7,6 +7,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.Objects;
+import java.util.Random;
 
 public class Model extends JPanel implements ActionListener {
     /*
@@ -43,6 +46,10 @@ public class Model extends JPanel implements ActionListener {
     private int pacman_x, pacman_y; // Koordinaten der Spielfigur
     private int pacmand_x, pacmand_y; // die Richtungs-Änderung in x- und y-Richtung der Spielfigur.
     private int req_dx, req_dy; // Variablen für die
+
+    private ArrayList<Bean> beans = new ArrayList<>();
+    private Random random = new Random();
+    private Image beanImage;
 
     private final short levelData1[] = {
             19, 18, 18, 18, 18, 18, 18, 18, 26, 18, 18, 18, 18, 18, 22,
@@ -109,13 +116,13 @@ public class Model extends JPanel implements ActionListener {
 
 
     private void loadImages() {
-        down = new ImageIcon("src/main/java/images/down.gif").getImage();
-        up = new ImageIcon("src/main/java/images/up.gif").getImage();
-        left = new ImageIcon("src/main/java/images/left.gif").getImage();
-        right = new ImageIcon("src/main/java/images/right.gif").getImage();
-        ghost = new ImageIcon("src/main/java/images/ghost.gif").getImage();
-        heart = new ImageIcon("src/main/java/images/heart.png").getImage();
-
+        down = new ImageIcon(Objects.requireNonNull(getClass().getResource("/images/down.gif"))).getImage();
+        up = new ImageIcon(Objects.requireNonNull(getClass().getResource("/images/up.gif"))).getImage();
+        left = new ImageIcon(Objects.requireNonNull(getClass().getResource("/images/left.gif"))).getImage();
+        right = new ImageIcon(Objects.requireNonNull(getClass().getResource("/images/right.gif"))).getImage();
+        ghost = new ImageIcon(Objects.requireNonNull(getClass().getResource("/images/ghost.gif"))).getImage();
+        heart = new ImageIcon(Objects.requireNonNull(getClass().getResource("/images/heart.png"))).getImage();
+        beanImage = new ImageIcon(Objects.requireNonNull(getClass().getResource("/images/bohnen.png"))).getImage();
     }
     private void initVariables() {
 
@@ -166,6 +173,22 @@ public class Model extends JPanel implements ActionListener {
         }
     }
 
+    private void placeBeansRandomly() {
+        ArrayList<Integer> emptyBlocks = new ArrayList<>();
+        for (int i = 0; i < N_BLOCKS * N_BLOCKS; i++) {
+            if (screenData[i] == 0) { // if the block is empty
+                emptyBlocks.add(i);
+            }
+        }
+        if (!emptyBlocks.isEmpty()) {
+            int randomBlockIndex = random.nextInt(emptyBlocks.size());
+            int randomBlock = emptyBlocks.get(randomBlockIndex);
+            int x = randomBlock % N_BLOCKS;
+            int y = randomBlock / N_BLOCKS;
+            beans.add(new Bean(x * BLOCK_SIZE, y * BLOCK_SIZE, beanImage));
+        }
+    }
+
     private void checkMaze() {
 
         int i = 0;
@@ -179,7 +202,16 @@ public class Model extends JPanel implements ActionListener {
 
             i++;
         }
+        for (Bean bean : beans) {
+            if (pacman_x > (bean.getX() - 12) && pacman_x < (bean.getX() + 12)
+                    && pacman_y > (bean.getY() - 12) && pacman_y < (bean.getY() + 12)) {
 
+                score += bean.getPoints();
+                beans.remove(bean);
+                SoundEffect.play("Audio/bean.wav"); // play the sound when a bean is collected
+                break;
+            }
+        }
         if (finished) {
             SoundEffect.play("Audio/slowClap.wav");
             score += 50;
@@ -339,6 +371,9 @@ public class Model extends JPanel implements ActionListener {
         short i = 0;
         int x, y;
 
+        for (Bean bean : beans) {
+            g2d.drawImage(bean.getImage(), bean.getX(), bean.getY(), this);
+        }
         for (y = 0; y < SCREEN_SIZE; y += BLOCK_SIZE) {
             for (x = 0; x < SCREEN_SIZE; x += BLOCK_SIZE) {
 
@@ -392,6 +427,12 @@ public class Model extends JPanel implements ActionListener {
         for (i = 0; i < N_BLOCKS * N_BLOCKS; i++) {
             screenData[i] = levelData[i];
         }
+        Timer beanTimer = new Timer(30000, e -> {
+            if (beans.isEmpty()) {
+                placeBeansRandomly();
+            }
+        });
+        beanTimer.start();
 
         continueLevel();
     }
