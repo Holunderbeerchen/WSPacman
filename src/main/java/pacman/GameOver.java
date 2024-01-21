@@ -9,6 +9,7 @@ public class GameOver extends JFrame {
     Color myRed = new Color (255, 0,0);
     public GameOver(int level) {
         super("Game Over");
+        SoundEffect.play("Audio/tf_nemesis.wav");
         setLayout(new GridLayout(3, 1));
         getContentPane().setBackground(myRed);
 
