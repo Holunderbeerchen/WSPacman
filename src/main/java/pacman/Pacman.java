@@ -6,12 +6,16 @@ import javax.swing.*;
 public class Pacman extends JFrame{
 
     private int level;
+    private Model model;
 
     public Pacman(int level) {
         this.level = level;
-        add(new Model(this, level));
+        this.model = new Model(this, level); // Initialisieren der Model-Instanz
+        add(model);
     }
-
+    public Model getModel() {
+        return this.model; // Hinzufügen einer Getter-Methode für Model
+    }
     public int getLevel() {
         return this.level;
     }

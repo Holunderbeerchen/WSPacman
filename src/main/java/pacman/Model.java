@@ -241,7 +241,7 @@ public class Model extends JPanel implements ActionListener {
             }
         }
         if (finished) {
-            SoundEffect.play("Audio/slowClap.wav");
+            SoundEffect.play("Audio/slowClap2.wav");
             score += 50;
 
             if (N_GHOSTS < MAX_GHOSTS) {
@@ -252,8 +252,11 @@ public class Model extends JPanel implements ActionListener {
             if (currentSpeed < maxSpeed) {
                 currentSpeed++;
             }
-
-            initLevel(); // Level wir mit mehr gegnern neu gestartet.
+            // Aufruf der LevelComplete-Klasse
+            LevelComplete levelCompleteScreen = new LevelComplete(pacman.getLevel(), pacman, pacman.getModel());
+            levelCompleteScreen.setVisible(true);
+            pacman.setVisible(false);
+            // initLevel(); // Level wir mit mehr gegnern neu gestartet.
         }
     }
 
@@ -461,7 +464,7 @@ public class Model extends JPanel implements ActionListener {
         currentSpeed = 3;
     }
 
-    private void initLevel() {
+    public void initLevel() {
         //Die Daten aus levelData werden in screenData reinkopiert.
         int i;
         for (i = 0; i < N_BLOCKS * N_BLOCKS; i++) {
