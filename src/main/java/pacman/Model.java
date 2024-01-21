@@ -60,7 +60,7 @@ public class Model extends JPanel implements ActionListener {
     private int currentSpeed = 3;
     private short[] screenData; // erstellt mithilfe von levelData[] das Spielfeld.
     private Timer timer;
-    //private boolean GameOver = false;
+
 
     private final Pacman pacman;
 
@@ -249,19 +249,6 @@ public class Model extends JPanel implements ActionListener {
     }
 
 
-    /* private void GameOver (Graphics2D g2d) {
-
-        String start = "Game Over";
-        g2d.setColor(Color.red);
-        Font originalFont = g2d.getFont();
-        Font newFont = originalFont.deriveFont(30f);
-        g2d.setFont(newFont);
-        g2d.drawString(start, (SCREEN_SIZE) / 3, 140);
-        g2d.setFont(originalFont);
-    }
-     */
-
-
     private void moveGhosts(Graphics2D g2d) {
 
         int pos;
@@ -330,7 +317,6 @@ public class Model extends JPanel implements ActionListener {
                     && inGame) {
 
                 dying = true;
-                //GameOver = true;
             }
         }
     }
@@ -402,7 +388,7 @@ public class Model extends JPanel implements ActionListener {
         for (y = 0; y < SCREEN_SIZE; y += BLOCK_SIZE) {
             for (x = 0; x < SCREEN_SIZE; x += BLOCK_SIZE) {
 
-                g2d.setColor(new Color(110,70,180));
+                g2d.setColor(new Color(110,80,150));
                 g2d.setStroke(new BasicStroke(5));
 
                 if ((levelData[i] == 0)) {
@@ -507,7 +493,6 @@ public class Model extends JPanel implements ActionListener {
         if (inGame) {
             playGame(g2d);
         } else {
-            //GameOver(g2d);
             showIntroScreen(g2d);
         }
 

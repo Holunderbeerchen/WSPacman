@@ -7,11 +7,11 @@ import java.awt.event.ActionListener;
 import java.io.InputStream;
 
 public class Menu extends JFrame {
-    Color myBlue = new Color(34, 83, 128);
+    Color myYellow = new Color(255, 255, 0);
     public Menu() {
         super("Welcome to P4c!"); // Set the title of the JFrame
         setLayout(new GridLayout(3, 1)); // Adjust the layout to accommodate the new label
-        getContentPane().setBackground(myBlue);
+        getContentPane().setBackground(myYellow);
         // Load the custom font
         Font rabbitFont;
         try {
@@ -26,7 +26,7 @@ public class Menu extends JFrame {
         // Create a JLabel for the welcome message
         JLabel welcomeLabel = new JLabel("Welcome to P4c!", SwingConstants.CENTER);
         welcomeLabel.setFont(rabbitFont);
-        welcomeLabel.setForeground(Color.RED);
+        welcomeLabel.setForeground(Color.BLACK);
 
         JButton level1Button = new JButton("Level 1");
         JButton level2Button = new JButton("Level 2");
@@ -36,8 +36,8 @@ public class Menu extends JFrame {
         level2Button.setFont(rabbitFont);
         level1Button.setBackground(Color.BLACK);
         level2Button.setBackground(Color.BLACK);
-        level1Button.setForeground(Color.RED);
-        level2Button.setForeground(Color.RED);
+        level1Button.setForeground(Color.YELLOW);
+        level2Button.setForeground(Color.YELLOW);
 
         level1Button.addActionListener(e -> startGame(1));
         level2Button.addActionListener(new ActionListener() {

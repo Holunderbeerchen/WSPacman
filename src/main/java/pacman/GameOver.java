@@ -6,9 +6,11 @@ import java.awt.*;
 import java.io.InputStream;
 
 public class GameOver extends JFrame {
+    Color myRed = new Color (255, 0,0);
     public GameOver(int level) {
         super("Game Over");
         setLayout(new GridLayout(3, 1));
+        getContentPane().setBackground(myRed);
 
         Font customFont;
         try {
@@ -16,28 +18,30 @@ public class GameOver extends JFrame {
             customFont = Font.createFont(Font.TRUETYPE_FONT, is).deriveFont(24f);
         } catch (Exception e) {
             e.printStackTrace();
-            customFont = new Font("Arial", Font.BOLD, 24);
+            customFont = new Font("Arial", Font.BOLD, 30);
         }
 
-        JLabel gameOverLabel = new JLabel("Game Over", SwingConstants.CENTER);
+        JLabel gameOverLabel = new JLabel("GAME OVER", SwingConstants.CENTER);
         gameOverLabel.setFont(customFont);
-        gameOverLabel.setForeground(Color.RED);
-        gameOverLabel.setBackground(Color.BLACK);
+        gameOverLabel.setForeground(Color.BLACK);
+        gameOverLabel.setBackground(Color.RED);
+        gameOverLabel.setBorder(new LineBorder(Color.RED, 4));
+        gameOverLabel.setPreferredSize(new Dimension(100,32));
 
 
         JButton restartButton = new JButton("Restart Level");
         JButton menuButton = new JButton("Return to Menu");
 
         restartButton.setFont(customFont);
-        restartButton.setBackground(Color.BLUE);
-        restartButton.setForeground(Color.RED);
-        restartButton.setBorder(new LineBorder(Color.RED, 4)); // Add a red border
+        restartButton.setBackground(Color.BLACK);
+        restartButton.setForeground(Color.YELLOW);
+        restartButton.setBorder(new LineBorder(Color.YELLOW, 4)); // Add a red border
         restartButton.setPreferredSize(new Dimension(100, 32)); // Set preferred size
 
         menuButton.setFont(customFont);
-        menuButton.setBackground(Color.BLUE);
-        menuButton.setForeground(Color.RED);
-        menuButton.setBorder(new LineBorder(Color.RED, 4)); // Add a red border
+        menuButton.setBackground(Color.BLACK);
+        menuButton.setForeground(Color.YELLOW);
+        menuButton.setBorder(new LineBorder(Color.YELLOW, 4)); // Add a red border
         menuButton.setPreferredSize(new Dimension(100, 32)); // Set preferred size
 
         restartButton.addActionListener(e -> restartLevel(level));
