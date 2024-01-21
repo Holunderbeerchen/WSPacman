@@ -253,10 +253,11 @@ public class Model extends JPanel implements ActionListener {
                 currentSpeed++;
             }
             // Aufruf der LevelComplete-Klasse
-            LevelComplete levelCompleteScreen = new LevelComplete(pacman.getLevel(), pacman, pacman.getModel());
+            LevelComplete levelCompleteScreen = new LevelComplete(pacman.getLevel(), pacman);
             levelCompleteScreen.setVisible(true);
             pacman.setVisible(false);
-            // initLevel(); // Level wir mit mehr gegnern neu gestartet.
+
+            initLevel(); // Level wir mit mehr gegnern neu gestartet.
         }
     }
 
@@ -464,7 +465,7 @@ public class Model extends JPanel implements ActionListener {
         currentSpeed = 3;
     }
 
-    public void initLevel() {
+    private void initLevel() {
         //Die Daten aus levelData werden in screenData reinkopiert.
         int i;
         for (i = 0; i < N_BLOCKS * N_BLOCKS; i++) {

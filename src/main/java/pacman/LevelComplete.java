@@ -7,13 +7,9 @@ import java.io.InputStream;
 
 public class LevelComplete extends JFrame {
     Color myGreen = new Color (0, 255,0);
-    private final Pacman pacman;
-    private final Model model;
 
-    public LevelComplete(int level, Pacman pacman, Model model) {
+    public LevelComplete(int level, Pacman pacman) {
         super("Level Complete");
-        this.pacman = pacman;
-        this.model = model;
         setLayout(new GridLayout(3, 1));
         getContentPane().setBackground(myGreen);
 
@@ -48,10 +44,7 @@ public class LevelComplete extends JFrame {
         menuButton.setBorder(new LineBorder(Color.YELLOW, 4));
         menuButton.setPreferredSize(new Dimension(100, 32));
 
-        continueButton.addActionListener(e -> {
-            continueGame(level + 1);
-            model.initLevel();
-        });
+        continueButton.addActionListener(e -> continueGame(level + 1));
         menuButton.addActionListener(e -> returnToMenu());
 
         add(levelCompleteLabel);
@@ -63,7 +56,6 @@ public class LevelComplete extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
     }
-
 
     private void continueGame(int level) {
         Pacman pac = new Pacman(level);

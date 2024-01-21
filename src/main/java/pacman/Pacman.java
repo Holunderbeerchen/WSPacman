@@ -13,9 +13,7 @@ public class Pacman extends JFrame{
         this.model = new Model(this, level); // Initialisieren der Model-Instanz
         add(model);
     }
-    public Model getModel() {
-        return this.model; // Hinzufügen einer Getter-Methode für Model
-    }
+
     public int getLevel() {
         return this.level;
     }
