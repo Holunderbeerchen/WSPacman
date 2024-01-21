@@ -2,7 +2,17 @@ package pacman;
 
 
 import javax.swing.*;
+/*
+javax.swing ist ein Paket in der Java Standard Edition (Java SE), das Teil der Java API ist.
+Weil es Teil der Java SE ist, wird kein weiteres Framework benötigt.
+Es stellt eine Sammlung von Klassen und Schnittstellen bereit, die für die Entwicklung von grafischen
+Benutzeroberflächen (GUIs) in Java-Anwendungen verwendet werden. Erweitert java.awt.
+*/
 import java.awt.*;
+/*
+javax.awt, ebenfalls Teil von Java SE. Enthält ähnlich wie javax.swing Klassen und Interfaces für GUIs.
+Älter als java.swing.
+*/
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -36,8 +46,8 @@ public class Model extends JPanel implements ActionListener {
 
     private int N_GHOSTS = 6; // Anfängliche Anzahl an Gegner.
     private int lives, score;
-    private int[] dx; //
-    private int[] dy; //
+    private int[] dx; // mögliche Änderung der x-Koordinate der Geister, für alle 4 Situationen
+    private int[] dy; // mögliche Änderung der y-Koordinate der Geister, für alle 4 Situationen
     private int[] ghost_x, ghost_y, ghost_dx, ghost_dy, ghostSpeed;
 
     private Image heart, ghost;
@@ -45,7 +55,9 @@ public class Model extends JPanel implements ActionListener {
 
     private int pacman_x, pacman_y; // Koordinaten der Spielfigur
     private int pacmand_x, pacmand_y; // die Richtungs-Änderung in x- und y-Richtung der Spielfigur.
-    private int req_dx, req_dy; // Variablen für die
+    private int req_dx, req_dy;
+    // Variablen für die Eingabe mit den Pfeiltasten. Diese Variablen werden mittels der TAdapter Klasse
+    // bestimmt. class TAdapter extends KeyAdapter
 
     private final ArrayList<Bean> beans = new ArrayList<>();
     private final Random random = new Random();
@@ -84,6 +96,12 @@ public class Model extends JPanel implements ActionListener {
                     25, 24, 24, 24, 26, 26, 26, 26, 26, 26, 26, 24, 24, 24, 28
             };
             levelData = levelData1;
+            /*
+            Jeder Eintrag = ein Spielbaustein.
+            Codierung: 0 = Hindernis, 1 = linker Rand, 2 = oberer Rand, 4 = rechter Rand, 8 = unterer Rand, 16 = Sammelstein.
+            Die Summe dieser Werte ist eindeutig, wenn jeder Wert nur einmal vorkommt und eignet sich daher gut um jeden
+            Baustein eindeutig zu beschreiben.
+            */
         } else if (level == 2) {
             short[] levelData2 = {
                     19, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 22,
@@ -101,13 +119,6 @@ public class Model extends JPanel implements ActionListener {
                     17, 20, 0, 0, 17, 16, 16, 18, 16, 16, 20, 0, 0, 17, 20,
                     17, 16, 18, 18, 16, 16, 16, 16, 16, 16, 16, 18, 18, 16, 20,
                     25, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 28
-
-                    /*
-                       Jeder Eintrag = ein Spielbaustein.
-                       Codierung: 0 = Hindernis, 1 = linker Rand, 2 = oberer Rand, 4 = rechter Rand, 8 = unterer Rand, 16 = Sammelstein.
-                       Die Summe dieser Werte ist eindeutig, wenn jeder Wert nur einmal vorkommt und eignet sich daher gut um jeden
-                       Baustein eindeutig zu beschreiben.
-                       */
             };
             levelData = levelData2;
         }
@@ -144,6 +155,16 @@ public class Model extends JPanel implements ActionListener {
         dy = new int[4];
 
         timer = new Timer(40, this);
+        /*
+        this: gibt das Objekt an, das als ActionListener für den Timer fungieren wird. Der ActionListener hört
+        in dem Fall auf das Timer-Objekt. Also die hört die Klasse "Model" auf den Timer.
+        Der Timer in Java ist ein Mechanismus, der dazu dient, regelmäßig wiederkehrende Aufgaben auszuführen.
+        Um auf Ereignisse des Timers zu reagieren, muss man einen sogenannten "ActionListener" implementieren.
+        Ein ActionListener ist ein Interface in Java, die eine Methode namens actionPerformed definiert. Diese
+        Methode wird aufgerufen, wenn das Ereignis eintritt, auf das der ActionListener hört.
+
+        Timer-delay hat keinen Einfluss auf die Geschwindigkeit der .gif-Animationen.
+         */
         timer.start();
     }
 
@@ -197,13 +218,13 @@ public class Model extends JPanel implements ActionListener {
     }
 
     private void checkMaze() {
-
+        // Überprüft, ob das Spiel gewonnen wurde und startet es dann mit neuen Gegnern neu.
         int i = 0;
         boolean finished = true;
 
         while (i < N_BLOCKS * N_BLOCKS && finished) {
 
-            if ((screenData[i]) != 0) {
+            if ((screenData[i] & 48)!= 0) {
                 finished = false;
             }
 
@@ -232,7 +253,7 @@ public class Model extends JPanel implements ActionListener {
                 currentSpeed++;
             }
 
-            initLevel();
+            initLevel(); // Level wir mit mehr gegnern neu gestartet.
         }
     }
 
@@ -257,36 +278,38 @@ public class Model extends JPanel implements ActionListener {
         for (int i = 0; i < N_GHOSTS; i++) {
             if (ghost_x[i] % BLOCK_SIZE == 0 && ghost_y[i] % BLOCK_SIZE == 0) {
                 pos = ghost_x[i] / BLOCK_SIZE + N_BLOCKS * (int) (ghost_y[i] / BLOCK_SIZE);
+                // Geister Position in Pixeln muss ein Vielfaches der Blockgröße sein damit
+                // seine Position aktualisiert wird.
 
                 count = 0;
 
-                if ((screenData[pos] & 1) == 0 && ghost_dx[i] != 1) {
+                if ((screenData[pos] & 1) == 0 && ghost_dx[i] != 1) { // Darf sich der Geist nach links Bewegen
                     dx[count] = -1;
                     dy[count] = 0;
                     count++;
                 }
 
-                if ((screenData[pos] & 2) == 0 && ghost_dy[i] != 1) {
+                if ((screenData[pos] & 2) == 0 && ghost_dy[i] != 1) { // Darf sich der Geist nach oben Bewegen
                     dx[count] = 0;
                     dy[count] = -1;
                     count++;
                 }
 
-                if ((screenData[pos] & 4) == 0 && ghost_dx[i] != -1) {
+                if ((screenData[pos] & 4) == 0 && ghost_dx[i] != -1) { // Darf sich der Geist nach rechts Bewegen
                     dx[count] = 1;
                     dy[count] = 0;
                     count++;
                 }
 
-                if ((screenData[pos] & 8) == 0 && ghost_dy[i] != -1) {
+                if ((screenData[pos] & 8) == 0 && ghost_dy[i] != -1) { // Darf sich der Geist nach unten Bewegen
                     dx[count] = 0;
                     dy[count] = 1;
                     count++;
                 }
 
-                if (count == 0) {
+                if (count == 0) { // Falls sich der jeweilige Geist gar nicht bewegen darf.
 
-                    if ((screenData[pos] & 15) == 15) {
+                    if ((screenData[pos] & 15) == 15) { // Weil er von Hindernissen komplett eingeschlossen ist.
                         ghost_dx[i] = 0;
                         ghost_dy[i] = 0;
                     } else {
@@ -302,18 +325,18 @@ public class Model extends JPanel implements ActionListener {
                         count = 3;
                     }
 
-                    ghost_dx[i] = dx[count];
+                    ghost_dx[i] = dx[count]; // es wird eine zufällige Bewegung vorerst ausgewählt.
                     ghost_dy[i] = dy[count];
                 }
 
             }
 
-            ghost_x[i] = ghost_x[i] + (ghost_dx[i] * ghostSpeed[i]);
+            ghost_x[i] = ghost_x[i] + (ghost_dx[i] * ghostSpeed[i]); // Die ausgewählte Bewegung wird nun durchgeführt.
             ghost_y[i] = ghost_y[i] + (ghost_dy[i] * ghostSpeed[i]);
             drawGhost(g2d, ghost_x[i] + 1, ghost_y[i] + 1);
 
-            if (pacman_x > (ghost_x[i] - 12) && pacman_x < (ghost_x[i] + 12)
-                    && pacman_y > (ghost_y[i] - 12) && pacman_y < (ghost_y[i] + 12)
+            if (pacman_x > (ghost_x[i] - 12) && pacman_x < (ghost_x[i] + 12) // Hit-Detection zwischen Pacman und Geistern
+                    && pacman_y > (ghost_y[i] - 12) && pacman_y < (ghost_y[i] + 12) // 12 entspricht der halben Pixelbreite der Modelle.
                     && inGame) {
 
                 dying = true;
@@ -330,42 +353,48 @@ public class Model extends JPanel implements ActionListener {
         int pos;
         short ch;
 
+        // Die erste if-Verzweigung liest Pacmans Position aus während seiner konstanten Bewegung aus.
+        // Pacmans Position in Pixeln muss ein Vielfaches der Blockgröße sein damit seine Position aktualisiert wird.
         if (pacman_x % BLOCK_SIZE == 0 && pacman_y % BLOCK_SIZE == 0) {
+            // Pacmans Position wird als einzelne Zahl zwischen 0 und 224 in "pos" gespeichert.
             pos = pacman_x / BLOCK_SIZE + N_BLOCKS * (int) (pacman_y / BLOCK_SIZE);
             ch = screenData[pos];
-
+            // wenn pacman auf einem Feld mit Sammelstein steht, wird seine Punktzahl um 1 erhöht.
             if ((ch & 16) != 0) {
                 screenData[pos] = (short) (ch & 15);
+                // Der Sammelstein wird entfernt. ANDing von "ch" mit der Maske 00001111. Es wird also um 16 reduziert.
                 score++;
                 SoundEffect.play("Audio/pop.wav");
             }
 
-            if (req_dx != 0 || req_dy != 0) {
-                if (!((req_dx == -1 && req_dy == 0 && (ch & 1) != 0)
-                        || (req_dx == 1 && req_dy == 0 && (ch & 4) != 0)
-                        || (req_dx == 0 && req_dy == -1 && (ch & 2) != 0)
+            if (req_dx != 0 || req_dy != 0) { // Falls man eine Richtungs-Eingabe macht
+                if (!((req_dx == -1 && req_dy == 0 && (ch & 1) != 0) // Überprüfen op Pacman die Bewegung machen darf.
+                        || (req_dx == 1 && req_dy == 0 && (ch & 4) != 0) // kein rechter Rand im Weg.
+                        || (req_dx == 0 && req_dy == -1 && (ch & 2) != 0) // kein oberer Rand im Weg.
                         || (req_dx == 0 && req_dy == 1 && (ch & 8) != 0))) {
-                    pacmand_x = req_dx;
-                    pacmand_y = req_dy;
+                    pacmand_x = req_dx; // Falls Pacman die Bewegung machen darf, werden seine
+                    pacmand_y = req_dy; // Richtungänderungs-Koordinaten aktualisiert.
                 }
             }
 
-            // Check for standstill
-            if ((pacmand_x == -1 && pacmand_y == 0 && (ch & 1) != 0)
-                    || (pacmand_x == 1 && pacmand_y == 0 && (ch & 4) != 0)
-                    || (pacmand_x == 0 && pacmand_y == -1 && (ch & 2) != 0)
-                    || (pacmand_x == 0 && pacmand_y == 1 && (ch & 8) != 0)) {
-                pacmand_x = 0;
+            // // Die if-Bedingung überprüft ob Pacman eine still stehen sollte.
+            if ((pacmand_x == -1 && pacmand_y == 0 && (ch & 1) != 0) // Pacman will gegen einen linken Rand.
+                    || (pacmand_x == 1 && pacmand_y == 0 && (ch & 4) != 0) // Pacman will gegen einen rechten Rand.
+                    || (pacmand_x == 0 && pacmand_y == -1 && (ch & 2) != 0) // Pacman will gegen einen oberen Rand.
+                    || (pacmand_x == 0 && pacmand_y == 1 && (ch & 8) != 0)) { // Pacman will gegen einen unteren Rand.
+                pacmand_x = 0; // In all diesen Fällen sollen seine Richtungänderungs-Koordinaten, 0 sein.
                 pacmand_y = 0;
             }
         }
         int PACMAN_SPEED = 6;
-        pacman_x = pacman_x + PACMAN_SPEED * pacmand_x;
+        pacman_x = pacman_x + PACMAN_SPEED * pacmand_x; // Pacmans Koordinaten werden hier aktualisiert.
         pacman_y = pacman_y + PACMAN_SPEED * pacmand_y;
     }
 
     private void drawPacman(Graphics2D g2d) {
-
+        // Erstellt die jeweiligen richtungsabhängigen Pacman Bilder
+        // g2d.drawImage(left, pacman_x + 1, pacman_y + 1, this)
+        // welches Bild und wo es gezeichnet werden soll.
         if (req_dx == -1) {
             g2d.drawImage(left, pacman_x + 1, pacman_y + 1, this);
         } else if (req_dx == 1) {
@@ -391,29 +420,29 @@ public class Model extends JPanel implements ActionListener {
                 g2d.setColor(new Color(110,80,150));
                 g2d.setStroke(new BasicStroke(5));
 
-                if ((levelData[i] == 0)) {
+                if ((levelData[i] == 0)) { // Hindernissblock wird erstellt.
                     g2d.fillRect(x, y, BLOCK_SIZE, BLOCK_SIZE);
                 }
 
-                if ((screenData[i] & 1) != 0) {
-                    g2d.drawLine(x, y, x, y + BLOCK_SIZE - 1);
+                if ((screenData[i] & 1) != 0) { // Linker Rand wird erstellt.
+                    g2d.drawLine(x, y, x, y + BLOCK_SIZE - 1); //drawLine
                 }
 
                 if ((screenData[i] & 2) != 0) {
-                    g2d.drawLine(x, y, x + BLOCK_SIZE - 1, y);
+                    g2d.drawLine(x, y, x + BLOCK_SIZE - 1, y); // Oberer Rand wird erstellt.
                 }
 
-                if ((screenData[i] & 4) != 0) {
+                if ((screenData[i] & 4) != 0) { // Rechter Rand wird erstellt.
                     g2d.drawLine(x + BLOCK_SIZE - 1, y, x + BLOCK_SIZE - 1,
                             y + BLOCK_SIZE - 1);
                 }
 
-                if ((screenData[i] & 8) != 0) {
+                if ((screenData[i] & 8) != 0) { // Unterrand Rand wird erstellt.
                     g2d.drawLine(x, y + BLOCK_SIZE - 1, x + BLOCK_SIZE - 1,
                             y + BLOCK_SIZE - 1);
                 }
 
-                if ((screenData[i] & 16) != 0) {
+                if ((screenData[i] & 16) != 0) { // Weißer Punkt
                     g2d.setColor(new Color(255,255,255));
                     g2d.fillOval(x + 10, y + 10, 6, 6);
                 }
@@ -433,7 +462,7 @@ public class Model extends JPanel implements ActionListener {
     }
 
     private void initLevel() {
-
+        //Die Daten aus levelData werden in screenData reinkopiert.
         int i;
         for (i = 0; i < N_BLOCKS * N_BLOCKS; i++) {
             screenData[i] = levelData[i];
@@ -445,17 +474,19 @@ public class Model extends JPanel implements ActionListener {
         });
         beanTimer.start();
 
-        continueLevel();
+        continueLevel(); //es wird continueLevel() aufgerufen.
     }
 
     private void continueLevel() {
+        // Anfangspositionen der Gegner und von Pacman werden festlegt.
+        // Auch deren Geschwindigkeit wird durch Math.random gesetzt.
 
         int dx = 1;
         int random;
 
         for (int i = 0; i < N_GHOSTS; i++) {
 
-            ghost_y[i] = 4 * BLOCK_SIZE; //start position
+            ghost_y[i] = 4 * BLOCK_SIZE; // Anfangs-Position der Gegner.
             ghost_x[i] = 4 * BLOCK_SIZE;
             ghost_dy[i] = 0;
             ghost_dx[i] = dx;
@@ -469,18 +500,26 @@ public class Model extends JPanel implements ActionListener {
             ghostSpeed[i] = validSpeeds[random];
         }
 
-        pacman_x = 7 * BLOCK_SIZE;  //start position
+        pacman_x = 7 * BLOCK_SIZE;  // Anfangs-Position von Pacman
         pacman_y = 11 * BLOCK_SIZE;
-        pacmand_x = 0;	//reset direction move
-        pacmand_y = 0;
-        req_dx = 0;		// reset direction controls
+        pacmand_x = 0;	// Pacman's Bewegungsrichtung zu Beginn des Spiels. Wird zu Beginn, also vor
+        pacmand_y = 0;  // Pacman's Bewegungsrichtung zu Beginn des Spiels. Wird zu Beginn, also vor
+        req_dx = 0;		// Diese Variablen werden durch die Pfeiltasten gesteuert und zu Beginn auf 0 gesetzt.
         req_dy = 0;
         dying = false;
     }
-
-
+    /*
+    paintComponent() ist eine Methode der Klasse JPanel (Subklasse von JComponent).
+    paintComponent() ist eine Methode in Java Swing, die in Komponenten-klassen wie JPanel überschrieben wird,
+    um die visuelle Darstellung der Komponente zu steuern.
+    paintComponent() muss nicht extra aufgerufen werden, sondern wird automatisch vom Framework aufgerufen.
+    */
+    @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        // Parameter "g" wird automatisch vom Framework übergeben solbald die Komponente dargestellt werden muss.
+        // In der Regel rufst du zuerst die super.paintComponent(g)-Methode
+        // auf, um sicherzustellen, dass die Standardzeichnung der übergeordneten Klasse durchgeführt wird.
 
         Graphics2D g2d = (Graphics2D) g;
 
@@ -497,18 +536,25 @@ public class Model extends JPanel implements ActionListener {
         }
 
         Toolkit.getDefaultToolkit().sync();
-        g2d.dispose();
+        // sync() ist eine Methode von Toolkit, die die Darstellung von Grafiken synchronisiert.
+        // Dies bedeutet, dass alle ausstehenden Zeichenoperationen auf dem Bildschirm sofort durchgeführt werden.
+        g2d.dispose(); // Objekt entfernen
     }
 
 
     //controls
     class TAdapter extends KeyAdapter {
-
+        /*
+        Die Klasse KeyAdapter bietet leere (nichts tuende) Standardimplementierungen für alle Methoden des
+        KeyListener, sodass du nur diejenigen überschreiben musst, für die du spezifische Aktionen implementieren möchtest.
+        Bei: class MyKeyListener implements KeyListener müsste man alle anderen Funktionen ebenfalls implementieren.
+        */
         @Override
         public void keyPressed(KeyEvent e) {
-
+            // KeyEvent ist eine Klasse in Java, die Teil des java.awt.event-Pakets ist.
             int key = e.getKeyCode();
-
+            // Die Methode getKeyCode() in KeyEvent gibt den Tastencodes des betreffenden Ereignisses zurück.
+            // Der Rückgabewert ist ein ganzzahliger Wert, der der jeweiligen Taste entspricht.
             if (inGame) {
                 if (key == KeyEvent.VK_LEFT) {
                     req_dx = -1;
@@ -527,9 +573,10 @@ public class Model extends JPanel implements ActionListener {
                     //GameOver = true;
                 }
             } else {
+                // mit der Leertaste wird das Spiel gestartet.
                 if (key == KeyEvent.VK_SPACE) {
                     inGame = true;
-                    initGame();
+                    initGame(); // Der Start des Spiels erfolgt durch die Methode "initGame()".
                 }
             }
         }
