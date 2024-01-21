@@ -34,6 +34,7 @@ public class Model extends JPanel implements ActionListener {
     private final int MAX_GHOSTS = 12;
     private final int PACMAN_SPEED = 6;
 
+
     private int N_GHOSTS = 6; // Anfängliche Anzahl an Gegner.
     private int lives, score;
     private int[] dx; //
@@ -50,6 +51,7 @@ public class Model extends JPanel implements ActionListener {
     private ArrayList<Bean> beans = new ArrayList<>();
     private Random random = new Random();
     private Image beanImage;
+
 
     private final short levelData1[] = {
             19, 18, 18, 18, 18, 18, 18, 18, 26, 18, 18, 18, 18, 18, 22,
@@ -69,21 +71,26 @@ public class Model extends JPanel implements ActionListener {
             25, 24, 24, 24, 26, 26, 26, 26, 26, 26, 26, 24, 24, 24, 28
     };
     private final short levelData2[] = {
-            19, 18, 18, 18, 18, 18, 18, 18, 26, 18, 18, 18, 18, 18, 22,
-            17, 16, 16, 16, 16, 16, 16, 20,  0, 17, 16, 16, 16, 16, 20,
-            17, 16, 16, 16, 16, 16, 16, 20,  0, 17, 24, 16, 16, 16, 20,
-            17, 16, 16, 16, 16, 16, 16, 20,  0, 21,  0, 17, 16, 16, 20,
-            17, 16, 16, 24, 24, 24, 24, 20,  0, 29,  0, 25, 24, 16, 20,
-            17, 16, 20,  0,  0,  0,  0, 21,  0,  0,  0,  0,  0, 17, 20,
-            17, 16, 20,  0, 19, 22,  0, 17, 18, 22,  0, 19, 18, 16, 20,
-            17, 16, 20,  0, 17, 28,  0, 17, 16, 20,  0, 17, 16, 16, 20,
-            17, 16, 20,  0, 21,  0,  0, 17, 16, 20,  0, 17, 16, 16, 20,
-            17, 16, 20,  0, 17, 18, 18, 16, 16, 20,  0, 17, 16, 16, 20,
-            17, 16, 20,  0, 17, 16, 16, 16, 16, 16, 18, 16, 16, 16, 20,
-            17, 16, 20,  0, 17, 16, 16, 16, 16, 16, 16, 16, 16, 16, 20,
-            17, 16, 16, 18, 24, 24, 24, 24, 24, 24, 24, 16, 16, 16, 20,
-            17, 16, 16, 20,  0,  0,  0,  0,  0,  0,  0, 17, 16, 16, 20,
-            25, 24, 24, 24, 26, 26, 26, 26, 26, 26, 26, 24, 24, 24, 28 };
+            19, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 22,
+            17, 16, 16, 24, 16, 16, 16, 16, 16, 16, 16, 24, 16, 16, 20,
+            17, 16, 20,  0, 17, 16, 16, 16, 16, 16, 20,  0, 17, 16, 20,
+            17, 16, 20,  0, 25, 24, 16, 16, 16, 24, 28,  0, 17, 16, 20,
+            17, 16, 20,  0,  0,  0, 17, 16, 20,  0,  0,  0, 17, 16, 20,
+            17, 16, 20,  0, 19, 18, 16, 16, 16, 18, 22,  0, 17, 16, 20,
+            17, 16, 20,  0, 17, 16, 16, 16, 16, 16, 20,  0, 17, 16, 20,
+            17, 16, 16, 18, 16, 16, 16, 16, 16, 16, 16, 18, 16, 16, 20,
+            17, 16, 16, 16, 16, 24, 24, 24, 24, 24, 16, 16, 16, 16, 20,
+            17, 16, 16, 16, 20,  0,  0,  0,  0,  0, 17, 16, 16, 16, 20,
+            17, 16, 24, 16, 16, 18, 22,  0, 19, 18, 16, 16, 24, 16, 20,
+            17, 20,  0, 25, 16, 16, 20,  0, 17, 16, 16, 28,  0, 17, 20,
+            17, 20,  0,  0, 17, 16, 16, 18, 16, 16, 20,  0,  0, 17, 20,
+            17, 16, 18, 18, 16, 16, 16, 16, 16, 16, 16, 18, 18, 16, 20,
+            25, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 28
+
+
+
+
+    };
     private short levelData[];
     /*
     Jeder Eintrag = ein Spielbaustein.
@@ -98,6 +105,7 @@ public class Model extends JPanel implements ActionListener {
     private int currentSpeed = 3;
     private short[] screenData; // erstellt mithilfe von levelData[] das Spielfeld.
     private Timer timer;
+    private boolean GameOver = false;
 
     public Model(int level) {
         if (level == 1) {
@@ -159,7 +167,7 @@ public class Model extends JPanel implements ActionListener {
 
         String start = "Press SPACE to start";
         g2d.setColor(Color.yellow);
-        g2d.drawString(start, (SCREEN_SIZE)/4, 150);
+        g2d.drawString(start, (SCREEN_SIZE)/3, 180);
     }
 
     private void drawScore(Graphics2D g) {
@@ -234,10 +242,22 @@ public class Model extends JPanel implements ActionListener {
 
         if (lives == 0) {
             inGame = false;
-        }
-
+            GameOver = true;
+        };
         continueLevel();
     }
+
+    private void GameOver (Graphics2D g2d) {
+
+        String start = "Game Over";
+        g2d.setColor(Color.red);
+        Font originalFont = g2d.getFont();
+        Font newFont = originalFont.deriveFont(30f);
+        g2d.setFont(newFont);
+        g2d.drawString(start, (SCREEN_SIZE) / 3, 140);
+        g2d.setFont(originalFont);
+    }
+
 
     private void moveGhosts(Graphics2D g2d) {
 
@@ -307,6 +327,7 @@ public class Model extends JPanel implements ActionListener {
                     && inGame) {
 
                 dying = true;
+                GameOver = true;
             }
         }
     }
@@ -427,7 +448,7 @@ public class Model extends JPanel implements ActionListener {
         for (i = 0; i < N_BLOCKS * N_BLOCKS; i++) {
             screenData[i] = levelData[i];
         }
-        Timer beanTimer = new Timer(30000, e -> {
+        Timer beanTimer = new Timer(15000, e -> {
             if (beans.isEmpty()) {
                 placeBeansRandomly();
             }
@@ -482,6 +503,7 @@ public class Model extends JPanel implements ActionListener {
         if (inGame) {
             playGame(g2d);
         } else {
+            GameOver(g2d);
             showIntroScreen(g2d);
         }
 
@@ -513,6 +535,7 @@ public class Model extends JPanel implements ActionListener {
                     req_dy = 1;
                 } else if (key == KeyEvent.VK_ESCAPE && timer.isRunning()) {
                     inGame = false;
+                    GameOver = true;
                 }
             } else {
                 if (key == KeyEvent.VK_SPACE) {
