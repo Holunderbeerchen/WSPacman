@@ -26,7 +26,7 @@ public class Menu extends JFrame {
         // Create a JLabel for the welcome message
         JLabel welcomeLabel = new JLabel("Welcome to P4c!", SwingConstants.CENTER);
         welcomeLabel.setFont(rabbitFont);
-        welcomeLabel.setForeground(Color.BLUE);
+        welcomeLabel.setForeground(Color.RED);
 
         JButton level1Button = new JButton("Level 1");
         JButton level2Button = new JButton("Level 2");
@@ -34,17 +34,12 @@ public class Menu extends JFrame {
         // Customize buttons
         level1Button.setFont(rabbitFont);
         level2Button.setFont(rabbitFont);
-        level1Button.setBackground(Color.BLUE);
-        level2Button.setBackground(Color.BLUE);
+        level1Button.setBackground(Color.BLACK);
+        level2Button.setBackground(Color.BLACK);
         level1Button.setForeground(Color.RED);
         level2Button.setForeground(Color.RED);
 
-        level1Button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                startGame(1);
-            }
-        });
+        level1Button.addActionListener(e -> startGame(1));
         level2Button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

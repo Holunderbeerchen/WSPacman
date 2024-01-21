@@ -32,7 +32,6 @@ public class Model extends JPanel implements ActionListener {
     private final int N_BLOCKS = 15; // Die Variable gibt an aus wie vielen Blöcken die Spielfläche aufgebaut ist.
     private final int SCREEN_SIZE = N_BLOCKS * BLOCK_SIZE;
     private final int MAX_GHOSTS = 12;
-    private final int PACMAN_SPEED = 6;
 
 
     private int N_GHOSTS = 6; // Anfängliche Anzahl an Gegner.
@@ -48,79 +47,79 @@ public class Model extends JPanel implements ActionListener {
     private int pacmand_x, pacmand_y; // die Richtungs-Änderung in x- und y-Richtung der Spielfigur.
     private int req_dx, req_dy; // Variablen für die
 
-    private ArrayList<Bean> beans = new ArrayList<>();
-    private Random random = new Random();
+    private final ArrayList<Bean> beans = new ArrayList<>();
+    private final Random random = new Random();
     private Image beanImage;
 
 
-    private final short levelData1[] = {
-            19, 18, 18, 18, 18, 18, 18, 18, 26, 18, 18, 18, 18, 18, 22,
-            17, 16, 16, 16, 16, 16, 16, 20,  0, 17, 16, 16, 16, 16, 20,
-            17, 16, 16, 16, 16, 16, 16, 20,  0, 17, 24, 16, 16, 16, 20,
-            17, 16, 16, 16, 16, 16, 16, 20,  0, 21,  0, 17, 16, 16, 20,
-            17, 16, 16, 24, 24, 24, 24, 20,  0, 29,  0, 25, 24, 16, 20,
-            17, 16, 20,  0,  0,  0,  0, 21,  0,  0,  0,  0,  0, 17, 20,
-            17, 16, 20,  0, 19, 22,  0, 17, 18, 22,  0, 19, 18, 16, 20,
-            17, 16, 20,  0, 17, 28,  0, 17, 16, 20,  0, 17, 16, 16, 20,
-            17, 16, 20,  0, 21,  0,  0, 17, 16, 20,  0, 17, 16, 16, 20,
-            17, 16, 20,  0, 17, 18, 18, 16, 16, 20,  0, 17, 16, 16, 20,
-            17, 16, 20,  0, 17, 16, 16, 16, 16, 16, 18, 16, 16, 16, 20,
-            17, 16, 20,  0, 17, 16, 16, 16, 16, 16, 16, 16, 16, 16, 20,
-            17, 16, 16, 18, 24, 24, 24, 24, 24, 24, 24, 16, 16, 16, 20,
-            17, 16, 16, 20,  0,  0,  0,  0,  0,  0,  0, 17, 16, 16, 20,
-            25, 24, 24, 24, 26, 26, 26, 26, 26, 26, 26, 24, 24, 24, 28
-    };
-    private final short levelData2[] = {
-            19, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 22,
-            17, 16, 16, 24, 16, 16, 16, 16, 16, 16, 16, 24, 16, 16, 20,
-            17, 16, 20,  0, 17, 16, 16, 16, 16, 16, 20,  0, 17, 16, 20,
-            17, 16, 20,  0, 25, 24, 16, 16, 16, 24, 28,  0, 17, 16, 20,
-            17, 16, 20,  0,  0,  0, 17, 16, 20,  0,  0,  0, 17, 16, 20,
-            17, 16, 20,  0, 19, 18, 16, 16, 16, 18, 22,  0, 17, 16, 20,
-            17, 16, 20,  0, 17, 16, 16, 16, 16, 16, 20,  0, 17, 16, 20,
-            17, 16, 16, 18, 16, 16, 16, 16, 16, 16, 16, 18, 16, 16, 20,
-            17, 16, 16, 16, 16, 24, 24, 24, 24, 24, 16, 16, 16, 16, 20,
-            17, 16, 16, 16, 20,  0,  0,  0,  0,  0, 17, 16, 16, 16, 20,
-            17, 16, 24, 16, 16, 18, 22,  0, 19, 18, 16, 16, 24, 16, 20,
-            17, 20,  0, 25, 16, 16, 20,  0, 17, 16, 16, 28,  0, 17, 20,
-            17, 20,  0,  0, 17, 16, 16, 18, 16, 16, 20,  0,  0, 17, 20,
-            17, 16, 18, 18, 16, 16, 16, 16, 16, 16, 16, 18, 18, 16, 20,
-            25, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 28
+    private short[] levelData;
 
 
-
-
-    };
-    private short levelData[];
-    /*
-    Jeder Eintrag = ein Spielbaustein.
-    Codierung: 0 = Hindernis, 1 = linker Rand, 2 = oberer Rand, 4 = rechter Rand, 8 = unterer Rand, 16 = Sammelstein.
-    Die Summe dieser Werte ist eindeutig, wenn jeder Wert nur einmal vorkommt und eignet sich daher gut um jeden
-    Baustein eindeutig zu beschreiben.
-    */
-
-    private final int validSpeeds[] = {1, 2, 3, 4, 6, 8};
-    private final int maxSpeed = 6;
+    private final int[] validSpeeds = {1, 2, 3, 4, 6, 8};
 
     private int currentSpeed = 3;
     private short[] screenData; // erstellt mithilfe von levelData[] das Spielfeld.
     private Timer timer;
-    private boolean GameOver = false;
+    //private boolean GameOver = false;
 
-    public Model(int level) {
+    private final Pacman pacman;
+
+    public Model(Pacman pacman, int level) {
         if (level == 1) {
+            short[] levelData1 = {
+                    19, 18, 18, 18, 18, 18, 18, 18, 26, 18, 18, 18, 18, 18, 22,
+                    17, 16, 16, 16, 16, 16, 16, 20, 0, 17, 16, 16, 16, 16, 20,
+                    17, 16, 16, 16, 16, 16, 16, 20, 0, 17, 24, 16, 16, 16, 20,
+                    17, 16, 16, 16, 16, 16, 16, 20, 0, 21, 0, 17, 16, 16, 20,
+                    17, 16, 16, 24, 24, 24, 24, 20, 0, 29, 0, 25, 24, 16, 20,
+                    17, 16, 20, 0, 0, 0, 0, 21, 0, 0, 0, 0, 0, 17, 20,
+                    17, 16, 20, 0, 19, 22, 0, 17, 18, 22, 0, 19, 18, 16, 20,
+                    17, 16, 20, 0, 17, 28, 0, 17, 16, 20, 0, 17, 16, 16, 20,
+                    17, 16, 20, 0, 21, 0, 0, 17, 16, 20, 0, 17, 16, 16, 20,
+                    17, 16, 20, 0, 17, 18, 18, 16, 16, 20, 0, 17, 16, 16, 20,
+                    17, 16, 20, 0, 17, 16, 16, 16, 16, 16, 18, 16, 16, 16, 20,
+                    17, 16, 20, 0, 17, 16, 16, 16, 16, 16, 16, 16, 16, 16, 20,
+                    17, 16, 16, 18, 24, 24, 24, 24, 24, 24, 24, 16, 16, 16, 20,
+                    17, 16, 16, 20, 0, 0, 0, 0, 0, 0, 0, 17, 16, 16, 20,
+                    25, 24, 24, 24, 26, 26, 26, 26, 26, 26, 26, 24, 24, 24, 28
+            };
             levelData = levelData1;
         } else if (level == 2) {
+            short[] levelData2 = {
+                    19, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 22,
+                    17, 16, 16, 24, 16, 16, 16, 16, 16, 16, 16, 24, 16, 16, 20,
+                    17, 16, 20, 0, 17, 16, 16, 16, 16, 16, 20, 0, 17, 16, 20,
+                    17, 16, 20, 0, 25, 24, 16, 16, 16, 24, 28, 0, 17, 16, 20,
+                    17, 16, 20, 0, 0, 0, 17, 16, 20, 0, 0, 0, 17, 16, 20,
+                    17, 16, 20, 0, 19, 18, 16, 16, 16, 18, 22, 0, 17, 16, 20,
+                    17, 16, 20, 0, 17, 16, 16, 16, 16, 16, 20, 0, 17, 16, 20,
+                    17, 16, 16, 18, 16, 16, 16, 16, 16, 16, 16, 18, 16, 16, 20,
+                    17, 16, 16, 16, 16, 24, 24, 24, 24, 24, 16, 16, 16, 16, 20,
+                    17, 16, 16, 16, 20, 0, 0, 0, 0, 0, 17, 16, 16, 16, 20,
+                    17, 16, 24, 16, 16, 18, 22, 0, 19, 18, 16, 16, 24, 16, 20,
+                    17, 20, 0, 25, 16, 16, 20, 0, 17, 16, 16, 28, 0, 17, 20,
+                    17, 20, 0, 0, 17, 16, 16, 18, 16, 16, 20, 0, 0, 17, 20,
+                    17, 16, 18, 18, 16, 16, 16, 16, 16, 16, 16, 18, 18, 16, 20,
+                    25, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 28
+
+                    /*
+                       Jeder Eintrag = ein Spielbaustein.
+                       Codierung: 0 = Hindernis, 1 = linker Rand, 2 = oberer Rand, 4 = rechter Rand, 8 = unterer Rand, 16 = Sammelstein.
+                       Die Summe dieser Werte ist eindeutig, wenn jeder Wert nur einmal vorkommt und eignet sich daher gut um jeden
+                       Baustein eindeutig zu beschreiben.
+                       */
+            };
             levelData = levelData2;
         }
-
 
         loadImages();
         initVariables();
         addKeyListener(new TAdapter());
         setFocusable(true);
         initGame();
+        this.pacman = pacman;
     }
+
 
 
     private void loadImages() {
@@ -228,6 +227,7 @@ public class Model extends JPanel implements ActionListener {
                 N_GHOSTS++;
             }
 
+            int maxSpeed = 6;
             if (currentSpeed < maxSpeed) {
                 currentSpeed++;
             }
@@ -236,18 +236,20 @@ public class Model extends JPanel implements ActionListener {
         }
     }
 
-    private void death() {
 
+
+    private void death() {
         lives--;
 
         if (lives == 0) {
-            inGame = false;
-            GameOver = true;
-        };
-        continueLevel();
+            pacman.death();
+        } else {
+            continueLevel();
+        }
     }
 
-    private void GameOver (Graphics2D g2d) {
+
+    /* private void GameOver (Graphics2D g2d) {
 
         String start = "Game Over";
         g2d.setColor(Color.red);
@@ -257,6 +259,7 @@ public class Model extends JPanel implements ActionListener {
         g2d.drawString(start, (SCREEN_SIZE) / 3, 140);
         g2d.setFont(originalFont);
     }
+     */
 
 
     private void moveGhosts(Graphics2D g2d) {
@@ -327,7 +330,7 @@ public class Model extends JPanel implements ActionListener {
                     && inGame) {
 
                 dying = true;
-                GameOver = true;
+                //GameOver = true;
             }
         }
     }
@@ -370,6 +373,7 @@ public class Model extends JPanel implements ActionListener {
                 pacmand_y = 0;
             }
         }
+        int PACMAN_SPEED = 6;
         pacman_x = pacman_x + PACMAN_SPEED * pacmand_x;
         pacman_y = pacman_y + PACMAN_SPEED * pacmand_y;
     }
@@ -503,7 +507,7 @@ public class Model extends JPanel implements ActionListener {
         if (inGame) {
             playGame(g2d);
         } else {
-            GameOver(g2d);
+            //GameOver(g2d);
             showIntroScreen(g2d);
         }
 
@@ -535,7 +539,7 @@ public class Model extends JPanel implements ActionListener {
                     req_dy = 1;
                 } else if (key == KeyEvent.VK_ESCAPE && timer.isRunning()) {
                     inGame = false;
-                    GameOver = true;
+                    //GameOver = true;
                 }
             } else {
                 if (key == KeyEvent.VK_SPACE) {
