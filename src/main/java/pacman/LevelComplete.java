@@ -10,13 +10,13 @@ public class LevelComplete extends JFrame {
     // Eine benutzerdefinierte grüne Farbe wird erstellt.
     Color myGreen = new Color (0, 255,0);
 
-    // Der Konstruktor der Klasse "LevelComplete". Er initialisiert das Layout und die Komponenten des Fensters.
+    // Der Konstruktor initialisiert das Layout und die Komponenten des Fensters.
     public LevelComplete(int level) {
         super("Level Complete");
         setLayout(new GridLayout(3, 1));
         getContentPane().setBackground(myGreen);
 
-        // Versucht, eine benutzerdefinierte Schriftart zu laden. Wenn dies fehlschlägt, wird eine Standardschriftart verwendet.
+        // Versucht wird eine benutzerdefinierte Schriftart zu laden. Wenn dies fehlschlägt, wird eine Standardschriftart verwendet.
         Font customFont;
         try {
             InputStream is = getClass().getResourceAsStream("/fonts/whitrabt.ttf");
@@ -27,7 +27,7 @@ public class LevelComplete extends JFrame {
             customFont = new Font("Arial", Font.BOLD, 30);
         }
 
-        // Erstellt und konfiguriert ein JLabel, das anzeigt, dass das Level abgeschlossen ist.
+        // Erstellt und konfiguriert ein JLabel, eine Art von Message, das anzeigt, dass das Level abgeschlossen ist.
         JLabel levelCompleteLabel = new JLabel("YOU WON", SwingConstants.CENTER);
         levelCompleteLabel.setFont(customFont);
         levelCompleteLabel.setForeground(Color.BLACK);
@@ -39,6 +39,7 @@ public class LevelComplete extends JFrame {
         JButton continueButton = new JButton("Continue");
         JButton menuButton = new JButton("Return to Menu");
 
+        //Jeweils für Fortsetzungs- und Menübutton die Farben und Größe des Fensters
         continueButton.setFont(customFont);
         continueButton.setBackground(Color.BLACK);
         continueButton.setForeground(Color.YELLOW);
@@ -61,14 +62,14 @@ public class LevelComplete extends JFrame {
         add(menuButton);
         pack();
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(400, 400);
-        setLocationRelativeTo(null);
-        setVisible(true);
+        setSize(400, 400); //Größe des Fensters
+        setLocationRelativeTo(null); //Fenster in der Mitte des Bildschirms wenn null
+        setVisible(true); //Sichtbarkeit des Fensters
     }
 
     // Die Methode "continueGame" startet das nächste Level des Spiels.
     private void continueGame(int level) {
-        Pacman pac = new Pacman(level);
+        Pacman pac = new Pacman(level); //Neues Pacman-Objekt
         pac.setVisible(true);
         pac.setTitle("Pacman");
         pac.setSize(380,420);
@@ -79,7 +80,7 @@ public class LevelComplete extends JFrame {
 
     // Die Methode "returnToMenu" kehrt zum Hauptmenü des Spiels zurück.
     private void returnToMenu() {
-        Menu menu = new Menu();
+        Menu menu = new Menu(); //Neues Menü-Objekt
         menu.setVisible(true);
         dispose();
     }
