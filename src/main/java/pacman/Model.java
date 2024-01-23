@@ -78,7 +78,7 @@ public class Model extends JPanel implements ActionListener {
 
     public Model(Pacman pacman, int level) {
         if (level == 1) {
-            short[] levelData1 = {
+            levelData = new short[]{
                     19, 18, 18, 18, 18, 18, 18, 18, 26, 18, 18, 18, 18, 18, 22,
                     17, 16, 16, 16, 16, 16, 16, 20, 0, 17, 16, 16, 16, 16, 20,
                     17, 16, 16, 16, 16, 16, 16, 20, 0, 17, 24, 16, 16, 16, 20,
@@ -95,7 +95,6 @@ public class Model extends JPanel implements ActionListener {
                     17, 16, 16, 20, 0, 0, 0, 0, 0, 0, 0, 17, 16, 16, 20,
                     25, 24, 24, 24, 26, 26, 26, 26, 26, 26, 26, 24, 24, 24, 28
             };
-            levelData = levelData1;
             /*
             Jeder Eintrag = ein Spielbaustein.
             Codierung: 0 = Hindernis, 1 = linker Rand, 2 = oberer Rand, 4 = rechter Rand, 8 = unterer Rand, 16 = Sammelstein.
@@ -103,7 +102,7 @@ public class Model extends JPanel implements ActionListener {
             Baustein eindeutig zu beschreiben.
             */
         } else if (level == 2) {
-            short[] levelData2 = {
+            levelData = new short[]{
                     19, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 22,
                     17, 16, 16, 24, 16, 16, 16, 16, 16, 16, 16, 24, 16, 16, 20,
                     17, 16, 20, 0, 17, 16, 16, 16, 16, 16, 20, 0, 17, 16, 20,
@@ -120,7 +119,6 @@ public class Model extends JPanel implements ActionListener {
                     17, 16, 18, 18, 16, 16, 16, 16, 16, 16, 16, 18, 18, 16, 20,
                     25, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 28
             };
-            levelData = levelData2;
         }
 
         loadImages();
@@ -253,7 +251,7 @@ public class Model extends JPanel implements ActionListener {
                 currentSpeed++;
             }
             // Aufruf der LevelComplete-Klasse
-            LevelComplete levelCompleteScreen = new LevelComplete(pacman.getLevel(), pacman);
+            LevelComplete levelCompleteScreen = new LevelComplete(pacman.getLevel());
             levelCompleteScreen.setVisible(true);
             pacman.setVisible(false);
 
@@ -281,7 +279,7 @@ public class Model extends JPanel implements ActionListener {
 
         for (int i = 0; i < N_GHOSTS; i++) {
             if (ghost_x[i] % BLOCK_SIZE == 0 && ghost_y[i] % BLOCK_SIZE == 0) {
-                pos = ghost_x[i] / BLOCK_SIZE + N_BLOCKS * (int) (ghost_y[i] / BLOCK_SIZE);
+                pos = ghost_x[i] / BLOCK_SIZE + N_BLOCKS * (ghost_y[i] / BLOCK_SIZE);
                 // Geister Position in Pixeln muss ein Vielfaches der Blockgröße sein damit
                 // seine Position aktualisiert wird.
 
@@ -361,7 +359,7 @@ public class Model extends JPanel implements ActionListener {
         // Pacmans Position in Pixeln muss ein Vielfaches der Blockgröße sein damit seine Position aktualisiert wird.
         if (pacman_x % BLOCK_SIZE == 0 && pacman_y % BLOCK_SIZE == 0) {
             // Pacmans Position wird als einzelne Zahl zwischen 0 und 224 in "pos" gespeichert.
-            pos = pacman_x / BLOCK_SIZE + N_BLOCKS * (int) (pacman_y / BLOCK_SIZE);
+            pos = pacman_x / BLOCK_SIZE + N_BLOCKS * (pacman_y / BLOCK_SIZE);
             ch = screenData[pos];
             // wenn pacman auf einem Feld mit Sammelstein steht, wird seine Punktzahl um 1 erhöht.
             if ((ch & 16) != 0) {

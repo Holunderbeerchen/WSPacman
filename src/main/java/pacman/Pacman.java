@@ -5,12 +5,11 @@ import javax.swing.*;
 
 public class Pacman extends JFrame{
 
-    private int level;
-    private Model model;
+    private final int level;
 
     public Pacman(int level) {
         this.level = level;
-        this.model = new Model(this, level); // Initialisieren der Model-Instanz
+        Model model = new Model(this, level); // Initialisieren der Model-Instanz
         add(model);
     }
 
