@@ -5,7 +5,7 @@ import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.io.InputStream;
 
-// Die Klasse "GameOver" repräsentiert den Bildschirm, der angezeigt wird, wenn das Spiel verloren ist.
+// Die Klasse "GameOver" repräsentiert das Fenster, der angezeigt wird, wenn das Spiel verloren ist.
 public class GameOver extends JFrame {
     // Eine benutzerdefinierte rote Farbe wird erstellt.
     Color myRed = new Color (255, 0,0);
@@ -42,7 +42,7 @@ public class GameOver extends JFrame {
         JButton restartButton = new JButton("Restart Level");
         JButton menuButton = new JButton("Return to Menu");
 
-        //Jeweils für Fortsetzungsbutton und Menübutton die Farben
+        //Jeweils für Fortsetzungs- und Menübutton die Farben
         restartButton.setFont(customFont);
         restartButton.setBackground(Color.BLACK);
         restartButton.setForeground(Color.YELLOW);
