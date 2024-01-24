@@ -8,15 +8,16 @@ import java.io.InputStream;
 
 public class Menu extends JFrame {
     Color myYellow = new Color(255, 255, 0);
+
     // Aufruf des Konstruktors der Oberklasse und Setzen des Fenstertitels
     public Menu() {
         //Titel
-        super("Welcome to P4c!");
+        super("Welcome to P4c!"); 
         // Setze das Layout des JFrames auf ein 3x1-GridLayout
-        setLayout(new GridLayout(3, 1));
+        setLayout(new GridLayout(3, 1)); 
         // Setze die Hintergrundfarbe des JFrame auf Gelb
         getContentPane().setBackground(myYellow);
-
+        
         // Benutzerdefinierte Schriftart laden
         Font rabbitFont;
         try {
@@ -24,7 +25,7 @@ public class Menu extends JFrame {
             rabbitFont = Font.createFont(Font.TRUETYPE_FONT, is).deriveFont(24f);
         } catch (Exception e) {
             e.printStackTrace();
-            // Fallback to Arial, wenn die benutzerdefinierte Schriftart nicht geladen werden kann
+            // Fallback zu Arial, wenn die benutzerdefinierte Schriftart nicht geladen werden kann
             rabbitFont = new Font("Arial", Font.BOLD, 24);
         }
 
@@ -44,7 +45,7 @@ public class Menu extends JFrame {
         level1Button.setForeground(Color.YELLOW);
         level2Button.setForeground(Color.YELLOW);
 
-        // FÃ¼ge ActionListener fÃ¼r die Buttons hinzu, um das Spiel mit dem ausgewÃ¤hlten Level zu starten
+        // Füge ActionListener für die Buttons hinzu, um das Spiel mit dem ausgewählten Level zu starten
         level1Button.addActionListener(e -> startGame(1));
         level2Button.addActionListener(new ActionListener() {
             @Override
@@ -52,32 +53,37 @@ public class Menu extends JFrame {
                 startGame(2);
             }
         });
-        // FÃœge die Komponenten zum JFrame hinzu
+
+        // Füge die Komponenten zum JFrame hinzu
         add(welcomeLabel);
         add(level1Button);
         add(level2Button);
 
-        // FÃ¼ge die Komponenten zum JFrame hinzu
+        // Füge die Komponenten zum JFrame hinzu
         pack();
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        // Setze die GrÃ¶ÃŸe un zentriere das JFrame auf den Bildschirm
+        // Setze die Größe und zentriere das JFrame auf dem Bildschirm
         setSize(400, 400);
         setLocationRelativeTo(null); // Zentriere JFrame
         setVisible(true);
     }
 
-    // Methode zum Starten des Spiels mit dem ausgewÃ¤hlten Level
+    // Methode zum Starten des Spiels mit dem ausgewählten Level
+
     private void startGame(int level) {
-       // Erstelle ein neues Pacman-Objekt
+
+        // Erstelle ein neues Pacman-Objekt
         Pacman pac = new Pacman(level);
+
         // Setze Eigenschaften des Pacman-Fensters
         pac.setVisible(true);
         pac.setTitle("Pacman");
         pac.setSize(380,420);
         pac.setDefaultCloseOperation(EXIT_ON_CLOSE);
         pac.setLocationRelativeTo(null);
-        // SchlieÃŸe das aktuelle JFrame
+
+        // Schließe das aktuelle JFrame
         dispose();
     }
 }
