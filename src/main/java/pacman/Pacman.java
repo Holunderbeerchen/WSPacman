@@ -4,18 +4,18 @@ import javax.swing.*;
 
 
 public class Pacman extends JFrame{
-    // Das ausgewählte Level
+    // Das ausgewÃ¤hlte Level
     private final int level;
 
     public Pacman(int level) {
         this.level = level;
 
-        // Initialisiere eine Model-Instanz und füge sie dem JFrame hinzu
+        // Initialisiere eine Model-Instanz und fÃ¼ge sie dem JFrame hinzu
         Model model = new Model(this, level); 
         add(model);
     }
 
-    // Methode zum Abrufen des ausgewählten Levels
+    // Methode zum Abrufen des ausgewÃ¤hlten Levels
     public int getLevel() {
         return this.level;
     }
@@ -29,13 +29,13 @@ public class Pacman extends JFrame{
         setVisible(false);
     }
 
-    // Hauptmethode für den Start des Spiels
+    // Hauptmethode fÃ¼r den Start des Spiels
     public static void main(String[] args) throws UnsupportedLookAndFeelException, ClassNotFoundException, InstantiationException, IllegalAccessException {
 
-        // Setze den Look and Feel auf das plattformübergreifende Look and Feel
+        // Setze den Look and Feel auf das plattformÃ¼bergreifende Look and Feel
         UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
 
-        // Starte das Menü, um das Spiel zu initialisieren
+        // Starte das MenÃ¼, um das Spiel zu initialisieren
         new Menu();
 
     }

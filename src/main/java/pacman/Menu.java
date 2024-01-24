@@ -45,7 +45,7 @@ public class Menu extends JFrame {
         level1Button.setForeground(Color.YELLOW);
         level2Button.setForeground(Color.YELLOW);
 
-        // Füge ActionListener für die Buttons hinzu, um das Spiel mit dem ausgewählten Level zu starten
+        // FÃ¼ge ActionListener fÃ¼r die Buttons hinzu, um das Spiel mit dem ausgewÃ¤hlten Level zu starten
         level1Button.addActionListener(e -> startGame(1));
         level2Button.addActionListener(new ActionListener() {
             @Override
@@ -54,22 +54,22 @@ public class Menu extends JFrame {
             }
         });
 
-        // Füge die Komponenten zum JFrame hinzu
+        // FÃ¼ge die Komponenten zum JFrame hinzu
         add(welcomeLabel);
         add(level1Button);
         add(level2Button);
 
-        // Füge die Komponenten zum JFrame hinzu
+        // FÃ¼ge die Komponenten zum JFrame hinzu
         pack();
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        // Setze die Größe und zentriere das JFrame auf dem Bildschirm
+        // Setze die GrÃ¶ÃŸe und zentriere das JFrame auf dem Bildschirm
         setSize(400, 400);
         setLocationRelativeTo(null); // Zentriere JFrame
         setVisible(true);
     }
 
-    // Methode zum Starten des Spiels mit dem ausgewählten Level
+    // Methode zum Starten des Spiels mit dem ausgewÃ¤hlten Level
 
     private void startGame(int level) {
 
@@ -83,7 +83,7 @@ public class Menu extends JFrame {
         pac.setDefaultCloseOperation(EXIT_ON_CLOSE);
         pac.setLocationRelativeTo(null);
 
-        // Schließe das aktuelle JFrame
+        // SchlieÃŸe das aktuelle JFrame
         dispose();
     }
 }
